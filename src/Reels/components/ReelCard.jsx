@@ -1,8 +1,7 @@
 // packages Imports
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View, StyleSheet, Dimensions, Text, Pressable} from 'react-native';
-import Slider from '@react-native-community/slider';
-import Video from 'react-native-video';
+import Video from '../../../../react-native-video';
 
 import Buttons from './Buttons';
 import Header from './Header';
@@ -151,67 +150,6 @@ function ReelCard({
   // Manage error here
   const videoError = error => {};
 
-  // useMemo for Slider
-  const GetSlider = useMemo(
-    () => (
-      <View style={styles.SliderContainer}>
-        <Text style={[styles.TimeOne, {color: timeElapsedColor}]}>
-          {helper.GetDurationFormat(Math.floor((Progress * Duration) / 100))}
-        </Text>
-        <Slider
-          style={{height: 40, width: '100%'}}
-          minimumValue={0}
-          maximumValue={100}
-          minimumTrackTintColor={minimumTrackTintColor}
-          maximumTrackTintColor={maximumTrackTintColor}
-          thumbTintColor={thumbTintColor}
-          value={Progress}
-          onSlidingComplete={data => SeekUpdate(data)}
-        />
-        <Text style={[styles.TimeTwo, {color: totalTimeColor}]}>
-          {helper.GetDurationFormat(Duration || 0)}
-        </Text>
-      </View>
-    ),
-    [
-      Duration,
-      Progress,
-      ShowOptions,
-      thumbTintColor,
-      totalTimeColor,
-      timeElapsedColor,
-      minimumTrackTintColor,
-      maximumTrackTintColor,
-    ],
-  );
-
-  // useMemo for Slider
-  const GetHeader = useMemo(
-    () => (
-      <View style={styles.HeaderContainer}>
-        <Header
-          onPress={onHeaderIconPress}
-          text={headerTitle}
-          customComponent={headerComponent}
-          customIcon={headerIcon}
-          color={headerIconColor}
-          name={headerIconName}
-          size={headerIconSize}
-        />
-      </View>
-    ),
-    [
-      ShowOptions,
-      headerComponent,
-      headerIcon,
-      headerIconColor,
-      headerIconName,
-      headerIconSize,
-      headerTitle,
-      onHeaderIconPress,
-    ],
-  );
-
   // useMemo for Options
   const GetButtons = useMemo(
     () => (
@@ -234,11 +172,6 @@ function ReelCard({
               name="message1"
               text="comment"
               onPress={() => onCommentPress(_id)}
-            />
-            <Buttons
-              name="sharealt"
-              text="share"
-              onPress={() => onSharePress(_id)}
             />
           </>
         )}
@@ -271,9 +204,7 @@ function ReelCard({
 
       {ShowOptions ? (
         <>
-          {GetHeader}
           {GetButtons}
-          {GetSlider}
         </>
       ) : null}
     </Pressable>
@@ -314,7 +245,7 @@ const styles = StyleSheet.create({
   OptionsContainer: {
     position: 'absolute',
     right: 10,
-    bottom: 70,
+    bottom: 140,
     zIndex: 100,
   },
   HeaderContainer: {
