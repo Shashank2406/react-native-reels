@@ -185,6 +185,19 @@ function ReelCard({
     ),
     [ShowOptions, optionsComponent, liked, disliked],
   );
+  const GetText = useMemo(
+    () => (
+      <View style={styles.textContainer}>
+        {optionsComponent ? null : (
+          <>
+           <Text style={styles.textHeaderStyle}>Lorium Lipsum</Text>
+           <Text style={styles.textStyle}>Lorium Lisum scores a goal...</Text>
+          </>
+        )}
+      </View>
+    ),
+    [ShowOptions, optionsComponent, liked, disliked],
+  );
 
   return (
     <Pressable
@@ -211,6 +224,7 @@ function ReelCard({
       {ShowOptions ? (
         <>
           {GetButtons}
+          {GetText}
         </>
       ) : null}
     </Pressable>
@@ -254,6 +268,12 @@ const styles = StyleSheet.create({
     bottom: 100,
     zIndex: 100,
   },
+  textContainer: {
+    position: 'absolute',
+    left: 20,
+    bottom: 130,
+    zIndex: 100,
+  },
   HeaderContainer: {
     position: 'absolute',
     width: ScreenWidth,
@@ -277,4 +297,20 @@ const styles = StyleSheet.create({
     height: ScreenHeight,
     zIndex: 99,
   },
+  textHeaderStyle: {
+    color: '#ffff',
+    fontWeight: 'bold',
+    fontSize: 16,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 10
+  },
+  textStyle: {
+    color: '#ffff',
+    fontSize: 10,
+    marginTop: 5,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 10
+  }
 });
