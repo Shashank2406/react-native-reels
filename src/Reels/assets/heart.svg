@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="heart" transform="translate(-2292.441 -700.305)">
+    <rect id="Rectangle_4523" data-name="Rectangle 4523" width="20" height="20" transform="translate(2292.441 700.305)" fill="#fff" opacity="0"/>
+    <path id="Icon_feather-heart" data-name="Icon feather-heart" d="M17.089,5.735a4.2,4.2,0,0,0-5.955,0l-.811.814-.811-.814a4.218,4.218,0,1,0-5.955,5.974l.811.814L10.323,18.5l5.955-5.974.811-.814a4.233,4.233,0,0,0,0-5.974Z" transform="translate(2292.118 698.806)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
+  </g>
+</svg>

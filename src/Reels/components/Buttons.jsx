@@ -1,7 +1,12 @@
 import React from 'react';
 import {View, StyleSheet, Text, Pressable} from 'react-native';
 
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import Share from '../assets/share.svg'
+import Volume from '../assets/volume.svg'
+import Heart from '../assets/heart.svg'
+import Play from '../assets/play.svg'
+import { BlurView } from '@react-native-community/blur';
+
 
 function Buttons({
   customComponent,
@@ -16,12 +21,26 @@ function Buttons({
       {customComponent ? (
         customComponent
       ) : (
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <AntDesign name={name} color={color} size={size} />
-          <Text style={{marginTop: 10, fontWeight: 'bold', color: 'white'}}>
+        <View>
+          {
+            name != 'play' &&  <BlurView
+            style={styles.blurViewStyle}
+            blurType='light'
+            blurAmount={1}
+            blurRadius={1}
+        >
+          {name === 'like' && <Heart/>}
+          {name === 'share' && <Share/>}
+          {name === 'volume' && <Volume/>}
+          </BlurView>
+          }
+         
+        { (name != 'play' && text.length > 0) && <Text style={{marginTop: 10, fontWeight: 'bold', color: 'white'}}>
             {text}
-          </Text>
+          </Text> }
+          {name === 'play' && <Play/>}
         </View>
+         
       )}
     </Pressable>
   );
@@ -34,8 +53,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 10,
-    paddingBottom: 10,
-    marginBottom: 5,
+    paddingBottom: 15,
+    marginRight: 15,
+  },
+  blurViewStyle: {
+    borderRadius: 20,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
   },
 });

@@ -72,7 +72,7 @@ function ReelCard({
   // Pause when use toggle options to True
   useEffect(() => {
     if (pauseOnOptionsShow) {
-      if (ShowOptions) SetPaused(true);
+      if (ShowOptions) SetPaused(false);
       else SetPaused(false);
     }
   }, [ShowOptions, pauseOnOptionsShow]);
@@ -157,20 +157,26 @@ function ReelCard({
         {optionsComponent ? null : (
           <>
             <Buttons
-              name={liked ? 'like1' : 'like2'}
-              text="like"
+              name={'like'}
+              text="12.1k"
               color={liked ? 'dodgerblue' : 'white'}
               onPress={() => onLikePress(_id)}
             />
             <Buttons
-              name={disliked ? 'dislike1' : 'dislike2'}
-              text="like"
+              name={'share'}
+              text="13.9k"
               color={disliked ? 'dodgerblue' : 'white'}
               onPress={() => onDislikePress(_id)}
             />
             <Buttons
-              name="message1"
-              text="comment"
+              name={'volume'}
+              text=""
+              color={disliked ? 'dodgerblue' : 'white'}
+              onPress={() => onDislikePress(_id)}
+            />
+            <Buttons
+              name={"play"}
+              text=""
               onPress={() => onCommentPress(_id)}
             />
           </>
@@ -195,7 +201,7 @@ function ReelCard({
         playInBackground={false}
         progressUpdateInterval={1000}
         paused={Paused}
-        muted={false}
+        muted={true}
         repeat={true}
         onLoad={onLoadComplete}
         onProgress={PlayBackStatusUpdate}
@@ -245,7 +251,7 @@ const styles = StyleSheet.create({
   OptionsContainer: {
     position: 'absolute',
     right: 10,
-    bottom: 140,
+    bottom: 100,
     zIndex: 100,
   },
   HeaderContainer: {
