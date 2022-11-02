@@ -1,16 +1,16 @@
 import React from 'react';
-import {View, StyleSheet, Text, Pressable} from 'react-native';
+import { View, StyleSheet, Text, Pressable } from 'react-native';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 function Header({
-  customComponent,
+  onPress,
+  size = 30,
   customIcon,
-  name = 'arrowleft',
   text = 'Reels',
   color = 'white',
-  size = 30,
-  onPress,
+  customComponent,
+  name = 'arrowleft',
 }) {
   return (
     <Pressable onPress={onPress}>
@@ -33,15 +33,15 @@ export default Header;
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    flexDirection: 'row',
     padding: 10,
     marginLeft: 20,
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   Text: {
-    fontWeight: 'bold',
-    color: 'white',
     fontSize: 20,
+    color: 'white',
     marginLeft: 20,
+    fontWeight: 'bold',
   },
 });

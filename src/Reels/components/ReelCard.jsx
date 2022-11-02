@@ -1,11 +1,18 @@
 // packages Imports
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {View, StyleSheet, Dimensions, Text, Pressable} from 'react-native';
+import React, {
+  useRef,
+  useMemo,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
+import { View, StyleSheet, Dimensions, Text, Pressable } from 'react-native';
+
+import Header from './Header';
+import Buttons from './Buttons';
+import helper from '../utils/helper';
 import Video from '../../../../react-native-video';
 
-import Buttons from './Buttons';
-import Header from './Header';
-import helper from '../utils/helper';
 // Screen Dimensions
 const ScreenWidth = Dimensions.get('window').width;
 const ScreenHeight = Dimensions.get('window').height;
@@ -13,55 +20,61 @@ const ScreenHeight = Dimensions.get('window').height;
 function ReelCard({
   uri,
   _id,
+  title,
+  index,
+  muted,
+  description,
   ViewableItem,
   liked = false,
+  textTitleStyle,
   disliked = false,
-  index,
+  textDescriptionStyle,
 
   // Container Props
   backgroundColor = 'black',
 
   // Header Props
-  headerTitle = 'Reels',
+  headerIcon,
   headerIconName,
   headerIconColor,
   headerIconSize,
-  headerIcon,
   headerComponent,
+  headerTitle = 'Reels',
   onHeaderIconPress = () => {},
 
   // Options Props
   optionsComponent,
-  pauseOnOptionsShow = true,
-  onSharePress = () => {},
-  onCommentPress = () => {},
   onLikePress = () => {},
+  onSharePress = () => {},
+  onVolumePress = () => {},
+  pauseOnOptionsShow = true,
+  onCommentPress = () => {},
   onDislikePress = () => {},
 
   // Player Props
   onFinishPlaying = () => {},
 
   // Slider Props
-  minimumTrackTintColor = 'white',
-  maximumTrackTintColor = 'grey',
   thumbTintColor = 'white',
+  maximumTrackTintColor = 'grey',
+  minimumTrackTintColor = 'white',
 
   // Time Props
-  timeElapsedColor = 'white',
   totalTimeColor = 'white',
+  timeElapsedColor = 'white',
 }) {
   // ref for Video Player
   const VideoPlayer = useRef(null);
 
   // States
-  const [VideoDimensions, SetVideoDimensions] = useState({
-    width: ScreenWidth,
-    height: ScreenWidth,
-  });
   const [Progress, SetProgress] = useState(0);
   const [Duration, SetDuration] = useState(0);
   const [Paused, SetPaused] = useState(false);
   const [ShowOptions, SetShowOptions] = useState(false);
+  const [VideoDimensions, SetVideoDimensions] = useState({
+    width: ScreenWidth,
+    height: ScreenWidth,
+  });
 
   // Play/Pause video according to viisibility
   useEffect(() => {
@@ -79,17 +92,17 @@ function ReelCard({
 
   // Callbhack for Seek Update
   const SeekUpdate = useCallback(
-    async seekTime => {
+    async (seekTime) => {
       try {
         if (VideoPlayer.current)
           VideoPlayer.current.seek((seekTime * Duration) / 100 / 1000);
       } catch (error) {}
     },
-    [Duration, ShowOptions],
+    [Duration, ShowOptions]
   );
 
   // Callback for PlayBackStatusUpdate
-  const PlayBackStatusUpdate = playbackStatus => {
+  const PlayBackStatusUpdate = (playbackStatus) => {
     try {
       let currentTime = Math.round(playbackStatus.currentTime);
       let duration = Math.round(playbackStatus.seekableDuration);
@@ -99,8 +112,8 @@ function ReelCard({
   };
 
   // function for getting video dimensions on load complete
-  const onLoadComplete = event => {
-    const {naturalSize} = event;
+  const onLoadComplete = (event) => {
+    const { naturalSize } = event;
 
     try {
       const naturalWidth = naturalSize.width;
@@ -148,7 +161,7 @@ function ReelCard({
   };
 
   // Manage error here
-  const videoError = error => {};
+  const videoError = (error) => {};
 
   // useMemo for Options
   const GetButtons = useMemo(
@@ -157,66 +170,79 @@ function ReelCard({
         {optionsComponent ? null : (
           <>
             <Buttons
+              text='12.1k'
               name={'like'}
-              text="12.1k"
-              color={liked ? 'dodgerblue' : 'white'}
               onPress={() => onLikePress(_id)}
+              color={liked ? 'dodgerblue' : 'white'}
             />
             <Buttons
+              text='13.9k'
               name={'share'}
-              text="13.9k"
+              onPress={() => onSharePress(_id)}
               color={disliked ? 'dodgerblue' : 'white'}
-              onPress={() => onDislikePress(_id)}
             />
             <Buttons
+              text=''
               name={'volume'}
-              text=""
+              onPress={() => onVolumePress()}
               color={disliked ? 'dodgerblue' : 'white'}
-              onPress={() => onDislikePress(_id)}
             />
             <Buttons
-              name={"play"}
-              text=""
+              text=''
+              name={'play'}
               onPress={() => onCommentPress(_id)}
             />
           </>
         )}
       </View>
     ),
-    [ShowOptions, optionsComponent, liked, disliked],
+    [ShowOptions, optionsComponent, liked, disliked]
   );
+
   const GetText = useMemo(
     () => (
       <View style={styles.textContainer}>
         {optionsComponent ? null : (
           <>
-           <Text style={styles.textHeaderStyle}>Lorium Lipsum</Text>
-           <Text style={styles.textStyle}>Lorium Lisum scores a goal...</Text>
+            {title && (
+              <Text style={[styles.textHeaderStyle, textTitleStyle]}>
+                {title}
+              </Text>
+            )}
+            {description && (
+              <Text
+                numberOfLines={3}
+                style={[styles.textStyle, textDescriptionStyle]}
+              >
+                {description}
+              </Text>
+            )}
           </>
         )}
       </View>
     ),
-    [ShowOptions, optionsComponent, liked, disliked],
+    [ShowOptions, optionsComponent, liked, disliked]
   );
 
   return (
     <Pressable
-      style={[styles.container, {backgroundColor: backgroundColor}]}
-      onPress={onMiddlePress}>
+      onPress={onMiddlePress}
+      style={[styles.container, { backgroundColor: backgroundColor }]}
+    >
       <Pressable style={styles.FirstHalf} onPress={onFirstHalfPress} />
       <Pressable style={styles.SecondHalf} onPress={onSecondHalfPress} />
       <Video
-        ref={VideoPlayer}
         source={uri}
-        style={VideoDimensions}
-        resizeMode="contain"
+        repeat={true}
+        muted={muted}
+        paused={Paused}
+        ref={VideoPlayer}
+        resizeMode='contain'
         onError={videoError}
+        style={VideoDimensions}
+        onLoad={onLoadComplete}
         playInBackground={false}
         progressUpdateInterval={1000}
-        paused={Paused}
-        muted={true}
-        repeat={true}
-        onLoad={onLoadComplete}
         onProgress={PlayBackStatusUpdate}
         onEnd={() => onFinishPlaying(index)}
       />
@@ -242,75 +268,75 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   SliderContainer: {
-    position: 'absolute',
-    width: ScreenWidth,
-    height: 55,
     bottom: 0,
+    height: 55,
     zIndex: 100,
+    width: ScreenWidth,
+    position: 'absolute',
   },
   TimeOne: {
-    color: 'grey',
-    position: 'absolute',
     left: 15,
-    fontSize: 13,
     bottom: 5,
+    color: 'grey',
+    fontSize: 13,
+    position: 'absolute',
   },
   TimeTwo: {
+    right: 15,
+    bottom: 5,
+    fontSize: 13,
     color: 'grey',
     position: 'absolute',
-    right: 15,
-    fontSize: 13,
-    bottom: 5,
   },
   OptionsContainer: {
-    position: 'absolute',
     right: 10,
     bottom: 100,
     zIndex: 100,
+    position: 'absolute',
   },
   textContainer: {
-    position: 'absolute',
     left: 20,
     bottom: 130,
     zIndex: 100,
+    position: 'absolute',
   },
   HeaderContainer: {
-    position: 'absolute',
-    width: ScreenWidth,
     top: 0,
     height: 50,
     zIndex: 100,
+    width: ScreenWidth,
+    position: 'absolute',
   },
   FirstHalf: {
-    position: 'absolute',
     top: 0,
     left: 0,
-    width: ScreenWidth * 0.25,
-    height: ScreenHeight,
     zIndex: 99,
+    position: 'absolute',
+    height: ScreenHeight,
+    width: ScreenWidth * 0.25,
   },
   SecondHalf: {
-    position: 'absolute',
     top: 0,
     right: 0,
-    width: ScreenWidth * 0.25,
-    height: ScreenHeight,
     zIndex: 99,
+    position: 'absolute',
+    height: ScreenHeight,
+    width: ScreenWidth * 0.25,
   },
   textHeaderStyle: {
+    fontSize: 16,
     color: '#ffff',
     fontWeight: 'bold',
-    fontSize: 16,
+    textShadowRadius: 10,
     textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: {width: -1, height: 1},
-    textShadowRadius: 10
+    textShadowOffset: { width: -1, height: 1 },
   },
   textStyle: {
-    color: '#ffff',
     fontSize: 10,
     marginTop: 5,
+    color: '#ffff',
+    textShadowRadius: 10,
     textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: {width: -1, height: 1},
-    textShadowRadius: 10
-  }
+    textShadowOffset: { width: -1, height: 1 },
+  },
 });

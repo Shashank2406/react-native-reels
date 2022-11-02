@@ -1,5 +1,5 @@
 // function to format seconds to proper time duration
-const GetDurationFormat = duration => {
+const GetDurationFormat = (duration) => {
   let time = duration / 1000;
   let minutes = Math.floor(time / 60);
   let timeForSeconds = time - minutes * 60;

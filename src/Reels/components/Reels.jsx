@@ -1,60 +1,64 @@
-import React, {useRef, useState} from 'react';
-import {Dimensions, FlatList} from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Dimensions, FlatList } from 'react-native';
 
 import ReelCard from './ReelCard';
 const ScreenHeight = Dimensions.get('window').height;
 
 function Reels({
   videos,
-  backgroundColor = 'black',
-  headerTitle,
-  headerIconName,
-  headerIconColor,
-  headerIconSize,
   headerIcon,
-  headerComponent,
-  onHeaderIconPress,
-  optionsComponent,
-  pauseOnOptionsShow,
+  headerTitle,
+  onLikePress,
   onSharePress,
   onCommentPress,
-  onLikePress,
+  headerIconName,
+  headerIconSize,
   onDislikePress,
+  thumbTintColor,
+  totalTimeColor,
+  textTitleStyle,
+  headerIconColor,
   onFinishPlaying,
+  headerComponent,
+  timeElapsedColor,
+  optionsComponent,
+  onHeaderIconPress,
+  pauseOnOptionsShow,
+  textDescriptionStyle,
   minimumTrackTintColor,
   maximumTrackTintColor,
-  thumbTintColor,
-  timeElapsedColor,
-  totalTimeColor,
+  backgroundColor = 'black',
 }) {
   const FlatlistRef = useRef(null);
+  const [muted, setMuted] = useState(false);
   const [ViewableItem, SetViewableItem] = useState('');
-  const viewConfigRef = useRef({viewAreaCoveragePercentThreshold: 70});
+  const viewConfigRef = useRef({ viewAreaCoveragePercentThreshold: 70 });
+
   const applyProps = {
-    backgroundColor: backgroundColor,
-    headerTitle: headerTitle,
-    headerIconName: headerIconName,
-    headerIconColor: headerIconColor,
-    headerIconSize: headerIconSize,
     headerIcon: headerIcon,
-    headerComponent: headerComponent,
-    onHeaderIconPress: onHeaderIconPress,
-    optionsComponent: optionsComponent,
-    pauseOnOptionsShow: pauseOnOptionsShow,
-    onSharePress: onSharePress,
-    onCommentPress: onCommentPress,
+    headerTitle: headerTitle,
     onLikePress: onLikePress,
+    onSharePress: onSharePress,
     onDislikePress: onDislikePress,
+    onCommentPress: onCommentPress,
+    totalTimeColor: totalTimeColor,
+    thumbTintColor: thumbTintColor,
+    headerIconName: headerIconName,
+    headerIconSize: headerIconSize,
     onFinishPlaying: onFinishPlaying,
+    backgroundColor: backgroundColor,
+    headerIconColor: headerIconColor,
+    headerComponent: headerComponent,
+    timeElapsedColor: timeElapsedColor,
+    optionsComponent: optionsComponent,
+    onHeaderIconPress: onHeaderIconPress,
+    pauseOnOptionsShow: pauseOnOptionsShow,
     minimumTrackTintColor: minimumTrackTintColor,
     maximumTrackTintColor: maximumTrackTintColor,
-    thumbTintColor: thumbTintColor,
-    timeElapsedColor: timeElapsedColor,
-    totalTimeColor: totalTimeColor,
   };
 
   // Viewable configuration
-  const onViewRef = useRef(viewableItems => {
+  const onViewRef = useRef((viewableItems) => {
     if (viewableItems?.viewableItems?.length > 0)
       SetViewableItem(viewableItems.viewableItems[0].item._id || 0);
   });
@@ -63,32 +67,35 @@ function Reels({
     <FlatList
       ref={FlatlistRef}
       data={videos}
-      keyExtractor={item => item._id.toString()}
-      renderItem={({item, index}) => (
+      keyExtractor={(item) => item._id.toString()}
+      renderItem={({ item, index }) => (
         <ReelCard
           {...item}
+          muted={muted}
           index={index}
+          pagingEnabled
+          {...applyProps}
+          decelerationRate={0.9}
           ViewableItem={ViewableItem}
-          onFinishPlaying={index => {
+          textTitleStyle={textTitleStyle}
+          getItemLayout={(_data, index) => ({
+            length: ScreenHeight,
+            offset: ScreenHeight * index,
+            index,
+          })}
+          onVolumePress={() => setMuted(!muted)}
+          onFinishPlaying={(index) => {
             if (index !== videos.length - 1) {
-              // @ts-ignore: Object is possibly 'null'.
               FlatlistRef.current.scrollToIndex({
                 index: index + 1,
               });
             }
           }}
-          {...applyProps}
+          viewabilityConfig={viewConfigRef.current}
+          onViewableItemsChanged={onViewRef.current}
+          textDescriptionStyle={textDescriptionStyle}
         />
       )}
-      getItemLayout={(_data, index) => ({
-        length: ScreenHeight,
-        offset: ScreenHeight * index,
-        index,
-      })}
-      pagingEnabled
-      decelerationRate={0.9}
-      onViewableItemsChanged={onViewRef.current}
-      viewabilityConfig={viewConfigRef.current}
     />
   );
 }
