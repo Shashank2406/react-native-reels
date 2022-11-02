@@ -24,9 +24,14 @@ function Reels({
   optionsComponent,
   onHeaderIconPress,
   pauseOnOptionsShow,
+  ListEmptyComponent,
+  ListHeaderComponent,
+  ListFooterComponent,
   textDescriptionStyle,
   minimumTrackTintColor,
   maximumTrackTintColor,
+  ListFooterComponentStyle,
+  ListHeaderComponentStyle,
   backgroundColor = 'black',
 }) {
   const FlatlistRef = useRef(null);
@@ -74,8 +79,13 @@ function Reels({
         offset: ScreenHeight * index,
         index,
       })}
+      ListEmptyComponent={ListEmptyComponent}
       viewabilityConfig={viewConfigRef.current}
+      ListHeaderComponent={ListHeaderComponent}
+      ListFooterComponent={ListFooterComponent}
       onViewableItemsChanged={onViewRef.current}
+      ListFooterComponentStyle={ListFooterComponentStyle}
+      ListHeaderComponentStyle={ListHeaderComponentStyle}
       keyExtractor={(item, index) => `${item?._id}_${index}`}
       renderItem={({ item, index }) => (
         <ReelCard
