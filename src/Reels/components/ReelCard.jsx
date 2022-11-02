@@ -291,13 +291,13 @@ const styles = StyleSheet.create({
   },
   OptionsContainer: {
     right: 10,
-    bottom: 100,
+    bottom: 75,
     zIndex: 100,
     position: 'absolute',
   },
   textContainer: {
     left: 20,
-    bottom: 130,
+    bottom: 105,
     zIndex: 100,
     position: 'absolute',
   },
