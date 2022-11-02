@@ -65,35 +65,37 @@ function Reels({
 
   return (
     <FlatList
-      ref={FlatlistRef}
       data={videos}
-      keyExtractor={(item) => item._id.toString()}
+      pagingEnabled
+      ref={FlatlistRef}
+      decelerationRate={0.9}
+      getItemLayout={(_data, index) => ({
+        length: ScreenHeight,
+        offset: ScreenHeight * index,
+        index,
+      })}
+      viewabilityConfig={viewConfigRef.current}
+      onViewableItemsChanged={onViewRef.current}
+      keyExtractor={(item, index) => `${item?._id}_${index}`}
       renderItem={({ item, index }) => (
         <ReelCard
           {...item}
           muted={muted}
           index={index}
-          pagingEnabled
-          {...applyProps}
-          decelerationRate={0.9}
+          onLikePress={onLikePress}
+          onSharePress={onSharePress}
           ViewableItem={ViewableItem}
           textTitleStyle={textTitleStyle}
-          getItemLayout={(_data, index) => ({
-            length: ScreenHeight,
-            offset: ScreenHeight * index,
-            index,
-          })}
           onVolumePress={() => setMuted(!muted)}
+          textDescriptionStyle={textDescriptionStyle}
           onFinishPlaying={(index) => {
             if (index !== videos.length - 1) {
-              FlatlistRef.current.scrollToIndex({
+              FlatlistRef?.current?.scrollToIndex({
                 index: index + 1,
               });
             }
           }}
-          viewabilityConfig={viewConfigRef.current}
-          onViewableItemsChanged={onViewRef.current}
-          textDescriptionStyle={textDescriptionStyle}
+          {...applyProps}
         />
       )}
     />

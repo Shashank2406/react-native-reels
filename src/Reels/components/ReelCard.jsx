@@ -176,7 +176,7 @@ function ReelCard({
               color={liked ? 'dodgerblue' : 'white'}
             />
             <Buttons
-              text='13.9k'
+              text=''
               name={'share'}
               onPress={() => onSharePress(_id)}
               color={disliked ? 'dodgerblue' : 'white'}
