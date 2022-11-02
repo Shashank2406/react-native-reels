@@ -183,6 +183,7 @@ function ReelCard({
             />
             <Buttons
               text=''
+              isMute={muted}
               name={'volume'}
               onPress={() => onVolumePress()}
               color={disliked ? 'dodgerblue' : 'white'}
@@ -196,7 +197,7 @@ function ReelCard({
         )}
       </View>
     ),
-    [ShowOptions, optionsComponent, liked, disliked]
+    [ShowOptions, optionsComponent, liked, disliked, muted]
   );
 
   const GetText = useMemo(

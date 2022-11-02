@@ -32,7 +32,7 @@ function Buttons({
             >
               {name === 'like' && <Heart />}
               {name === 'share' && <Share />}
-              {name === 'volume' && isMute ? <Mute /> : <Volume />}
+              {name === 'volume' && (isMute ? <Mute /> : <Volume />)}
             </BlurView>
           )}
 
@@ -59,6 +59,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   blurViewStyle: {
+    width: 40,
+    height: 40,
     padding: 10,
     borderRadius: 20,
     overflow: 'hidden',
