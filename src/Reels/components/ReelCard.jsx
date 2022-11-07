@@ -20,12 +20,14 @@ const ScreenHeight = Dimensions.get('window').height;
 function ReelCard({
   uri,
   _id,
+  data,
   title,
   index,
   muted,
   description,
   ViewableItem,
   liked = false,
+  isPauseOutside,
   textTitleStyle,
   disliked = false,
   textDescriptionStyle,
@@ -46,6 +48,7 @@ function ReelCard({
   optionsComponent,
   onLikePress = () => {},
   onSharePress = () => {},
+  onPlayPress = () => {},
   onVolumePress = () => {},
   pauseOnOptionsShow = true,
   onCommentPress = () => {},
@@ -81,6 +84,12 @@ function ReelCard({
     if (ViewableItem === _id) SetPaused(false);
     else SetPaused(true);
   }, [ViewableItem]);
+
+  // Play/Pause video according to focus listener
+  useEffect(() => {
+    if (ViewableItem === _id) SetPaused(isPauseOutside);
+    else SetPaused(true);
+  }, [isPauseOutside]);
 
   // Pause when use toggle options to True
   useEffect(() => {
@@ -191,7 +200,10 @@ function ReelCard({
             <Buttons
               text=''
               name={'play'}
-              onPress={() => onCommentPress(_id)}
+              onPress={() => {
+                SetPaused(true);
+                onPlayPress(_id, data);
+              }}
             />
           </>
         )}

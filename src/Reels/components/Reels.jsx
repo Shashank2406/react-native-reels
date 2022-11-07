@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, FlatList } from 'react-native';
 
 import ReelCard from './ReelCard';
@@ -6,9 +6,11 @@ const ScreenHeight = Dimensions.get('window').height;
 
 function Reels({
   videos,
+  navigation,
   headerIcon,
   headerTitle,
   onLikePress,
+  onPlayPress,
   onSharePress,
   onCommentPress,
   headerIconName,
@@ -33,11 +35,24 @@ function Reels({
   ListFooterComponentStyle,
   ListHeaderComponentStyle,
   backgroundColor = 'black',
+  enablePlayPauseOnNavigation,
 }) {
   const FlatlistRef = useRef(null);
   const [muted, setMuted] = useState(false);
+  const [isPause, setPause] = useState(false);
   const [ViewableItem, SetViewableItem] = useState('');
   const viewConfigRef = useRef({ viewAreaCoveragePercentThreshold: 70 });
+
+  useEffect(() => {
+    if (enablePlayPauseOnNavigation) {
+      navigation.addListener('focus', () => {
+        setPause(false);
+      });
+      navigation.addListener('blur', () => {
+        setPause(true);
+      });
+    }
+  });
 
   const applyProps = {
     headerIcon: headerIcon,
@@ -90,9 +105,12 @@ function Reels({
       renderItem={({ item, index }) => (
         <ReelCard
           {...item}
+          data={item}
           muted={muted}
           index={index}
+          isPauseOutside={isPause}
           onLikePress={onLikePress}
+          onPlayPress={onPlayPress}
           onSharePress={onSharePress}
           ViewableItem={ViewableItem}
           textTitleStyle={textTitleStyle}
